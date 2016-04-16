@@ -25,6 +25,9 @@
     "autoload": {
         "psr-4": {
             "pisc\\Arrr\\": "src/"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     }
 }

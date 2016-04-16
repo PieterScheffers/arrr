@@ -1,6 +1,6 @@
 <?php
 
-namespace pisc\arrr;
+namespace pisc\Arrr;
 
 use Closure;
 

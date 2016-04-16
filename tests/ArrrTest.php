@@ -10,6 +10,12 @@ class ArrrTest extends PHPUnit_Framework_TestCase
         echo __CLASS__ . "/" . $this->getName() . "\n";
     }
 
+    public function testFunctionCall()
+    {
+        $array = ar(['someKey' => "someValue"]);
+        $this->assertEquals( $array["someKey"], "someValue" );
+    }
+
 	public function testDetect() {
     	$arrayOfObjects = new Arrr([
     		(object)[ 'id' => 25, 'place' => 'Amsterdam' ],

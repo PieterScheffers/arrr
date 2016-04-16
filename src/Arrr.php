@@ -6,7 +6,7 @@
  * are ending with 'It'
  */
 
-namespace pisc\arrr;
+namespace pisc\Arrr;
 
 use ArrayIterator;
 use IteratorAggregate;
