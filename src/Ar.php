@@ -168,7 +168,7 @@ class Ar
 	 */
 	function groupBy($array, $groupBy = "id")
 	{
-		return array_reduce($array, function($arr, $item) use ($groupBy) {
+		return static::reduce($array, function($arr, $item) use($groupBy) {
 
 			// get value of attribute
 			if( is_closure($groupBy) )
