@@ -1,0 +1,30 @@
+{
+    "name": "pieterscheffers/arrr",
+    "description": "Array class for PHP",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.*",
+        "pisc/upperscore": "*"
+    },
+    "authors": [
+        {
+            "name": "Pieter Scheffers",
+            "email": "info@pieterscheffers.nl",
+            "homepage": "https://www.pieterscheffers.nl",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/PieterScheffers/arrr/issues",
+        "wiki": "https://github.com/PieterScheffers/arrr/wiki",
+        "source": "https://github.com/PieterScheffers/arrr"
+    },
+    "autoload": {
+        "psr-4": {
+            "pisc\\Arrr\\": "src/"
+        }
+    }
+}
