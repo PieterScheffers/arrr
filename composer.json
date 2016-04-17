@@ -1,5 +1,5 @@
 {
-    "name": "pieterscheffers/arrr",
+    "name": "pisc/arrr",
     "description": "Array class for PHP",
     "license": "MIT",
     "require": {
