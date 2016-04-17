@@ -30,6 +30,16 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 		$this->attributes = (array)$attributes;
 	}
 
+	public static function instance($attributes)
+	{
+		return new static($attributes);
+	}
+
+	public static function ar($attributes)
+	{
+		return new static($attributes);
+	}
+
 	/////////////// functional ///////////////
 
 	public function reduce(Closure $callback, $initial = 0)
@@ -160,6 +170,89 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 	public function sortByIt($sortByKeys, $methods)
 	{
 		$this->attributes = Ar::sortBy($this->attributes, $sortByKeys, $methods);
+
+		return $this;
+	}
+
+	/////////////// Push / Pop / Shift / Unshift ///////////////
+	
+	public function append($items)
+	{
+		foreach( (array) $items as $key => $item ) 
+		{
+			array_push($this->attributes, $item);
+		}
+
+		return $this;
+	}
+
+	public function push($items)
+	{
+		return $this->append($items);
+	}
+
+	public function pop($count = 1)
+	{
+		$poppedItems = [];
+		$i = 0;
+
+		while(( $item = array_pop($this->attributes) ) && $i < $count )
+		{
+			$poppedItems[] = $item;
+			$i += 1;
+		}
+
+		return count($poppedItems) === 1 ? $poppedItems[0] : $poppedItems;
+	}
+
+	public function last($count = 1)
+	{
+		$items = $this->slice(-$count);
+		return (count($items) === 1) ? $items[0] : $items;
+	}
+
+	public function prepend($items)
+	{
+		foreach( (array) $items as $key => $item ) 
+		{
+			array_unshift($this->attributes, $item);
+		}
+
+		return $array;
+	}
+
+	public function unshift($items)
+	{
+		return $this->prepend($items);
+	}
+
+	public function shift($count = 1)
+	{
+		$shiftedItems = [];
+		$i = 0;
+
+		while(( $item = array_shift($this->attributes) ) && $i < $count )
+		{
+			$shiftedItems[] = $item;
+			$i += 1;
+		}
+
+		return count($shiftedItems) === 1 ? $shiftedItems[0] : $shiftedItems;
+	}
+
+	public function first($count = 1)
+	{
+		return $this->slice(0, $count);
+	}
+
+	public function slice($offset, $length = null)
+	{
+		return new static( Ar::slice($this->attributes, $offset, $length) );
+	}
+
+	public function sliceIt($offset, $length = null)
+	{
+		$this->attributes = Ar::slice($this->attributes, $offset, $length);
 
 		return $this;
 	}

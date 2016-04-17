@@ -7,12 +7,36 @@ Array class for PHP
 $ composer require pisc/arrr
 ```
 
+## Instantiation:
+
+```php
+// shorthand function (global function)
+$array = ar([ 'someKey' => 'someValue' ]);
+
+// constructor
+$array = new Arrr([ 'someKey' => 'someValue' ]);
+
+$array = new Ar([ 'someKey' => 'someValue' ]); // returns Ar instance
+$array->mapIt(function($item) {
+	return $item . "_suffix";
+}); // returns Arrr instance
+
+// factory
+$array = Arrr::ar([ 'someKey' => 'someValue' ]);
+$array = Arrr::instance([ 'someKey' => 'someValue' ]);
+$array = Ar::ar([ 'someKey' => 'someValue' ]);
+$array = Ar::instance([ 'someKey' => 'someValue' ]);
+
+```
+
 ## How to use:
 
 ```php
 use pisc\arrr\arrr;
 
-$array = new Arrr([ 'someKey' => 'someValue' ]);
+$array = ar([ 'someKey' => 'someValue' ]);
+
+$array->
 
 ```
 
@@ -27,7 +51,7 @@ $flat = Ar::flatten([ 'cow', [ 'bear', ['bunny', 'santa' ], 'rabbit' ]]);
 All methods ending on 'It' modify the array itself and return itself, so you can do something like:
 
 ```php
-$places = new Arrr([
+$places = ar([
 	'Amsterdam',
 	'Berlin',
 	'Paris',
@@ -38,11 +62,60 @@ $places = new Arrr([
 
 $places->filterIt(function($place) {
 	return in_array($place[0], [ 'A', 'V', 'R' ]);
-})->mapIt(function($place) {
+});
+
+$places->mapIt(function($place) {
 	return "To destination {$place}";
-})->toJson();
+})
+
+echo $places->toJson();
 
 // returns
 '[ "To destination Amsterdam", "To destination Vienna", "To destination Rome" ]'
 ```
 ## Run tests
+
+```sh
+# When installed globally
+$ phpunit 
+
+# When installed locally
+$ ./vendor/bin/phpunit
+```
+
+## Methods
+
+### sortBy (sortByIt)
+Sort an array by multiple keys or result of a closure
+When a compare function result in 0, it will test the next key or closure
+
+accepts: 
+- $sortByKeys ((array) string / closure ) 
+- $methods    ((array) string / callable )
+
+```php
+$array = ar([
+	(object)[ 'id' => 1, 'name' => 'Jack', 'length' => 180 ],
+	(object)[ 'id' => 2, 'name' => 'Jack', 'length' => 150 ],
+	(object)[ 'id' => 3, 'name' => 'Ben', 'length' => 180 ],
+	(object)[ 'id' => 4, 'name' => 'Ben', 'length' => 150 ],
+	(object)[ 'id' => 5, 'name' => 'Vince', 'length' => 180 ],
+	(object)[ 'id' => 6, 'name' => 'Vince', 'length' => 150 ],
+]);
+
+$sortedArray = $array->sortBy([ 'length', 'name' ], [ 'Sort::byDefault', 'strcmp' ]);
+
+// result
+[
+	(object)[ 'id' => 4, 'name' => 'Ben', 'length' => 150 ],
+	(object)[ 'id' => 2, 'name' => 'Jack', 'length' => 150 ],
+	(object)[ 'id' => 6, 'name' => 'Vince', 'length' => 150 ],
+	(object)[ 'id' => 3, 'name' => 'Ben', 'length' => 180 ],
+	(object)[ 'id' => 1, 'name' => 'Jack', 'length' => 180 ],
+	(object)[ 'id' => 5, 'name' => 'Vince', 'length' => 180 ],
+	
+]
+
+
+```
+
