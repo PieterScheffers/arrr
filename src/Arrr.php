@@ -366,7 +366,6 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 	 */
 	public static function __callStatic($name, $arguments)
 	{
-		echo "bla\n";
 		return call_user_func_array(["Ar", $name], $arguments);
 	}
 

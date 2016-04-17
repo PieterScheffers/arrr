@@ -183,7 +183,7 @@ class Ar
 
 				$method = isset($methods[$key]) ? $methods[$key] : $methods[ ( count($methods) - 1 ) ];
 
-				$return = $method($aSort, $bSort);
+				$return = call_user_func($method, $aSort, $bSort);
 
 				if( $return !== 0 )
 				{
