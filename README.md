@@ -36,8 +36,6 @@ use pisc\arrr\arrr;
 
 $array = ar([ 'someKey' => 'someValue' ]);
 
-$array->
-
 ```
 
 ```php
@@ -45,6 +43,11 @@ $array->
 $flat = Ar::flatten([ 'cow', [ 'bear', ['bunny', 'santa' ], 'rabbit' ]]);
 
 ```
+
+Most methods are callable as:
+- Static method with the first parameter the array     - Ar::map($array, function($item) { return $item; })
+- Instance method which returns a new instance of Arrr - $Arrr->map(function($item) { return $item; })
+- Instance method which works on the current instance  - $Arrr->mapIt(function($item) { return $item; })
 
 ## Convention
 
