@@ -4,6 +4,7 @@ namespace pisc\Arrr;
 
 use Closure;
 use pisc\upperscore as u;
+use pisc\Arrr\Sort;
 
 class Ar
 {
@@ -76,7 +77,7 @@ class Ar
 	{
 		foreach( $array as $key => $value ) 
 		{
-			if( $callback($value, $key) )
+			if( call_user_func($callback, $value, $key) )
 			{
 				return $value;
 			}
@@ -112,7 +113,7 @@ class Ar
 		{
 			if( is_callable($property) )
 			{
-				$key = $property($value, $key);
+				$key = call_user_func($property, $value, $key);
 			}
 			else
 			{
@@ -150,13 +151,22 @@ class Ar
 
 	/**
 	 * Sort by multiple keys
+	 *
+	 * Usages:
+	 *
+	 * String of attributes
+	 * Ar::sortBy($array, 'created_at.firstName', [ 'Sort::byDateTime', 'Sort::byString' ], [ 'asc', 'desc' ]);
+	 *
+	 * Array
+	 * Ar::sortBy($array, [ 'created_at', function($i) { return strtolower($i->firstName); } ], [ 'Sort::byDateTime', 'Sort::byString' ], [ 'asc', 'desc' ])
 	 * 
 	 * @param  array           $array    Array of values
 	 * @param  string/array    $sortBy   String with dots seperating keys or array of keys/functions
-	 * @param  array/callable  $methods  Array of compare methods or one method
+	 * @param  array/callable  $sorters  Array of compare sorters or one method
+	 * @param  array           $orders   Array of order (desc/asc)
 	 * @return array                     Sorted array
 	 */
-	public static function sortBy($array, $sortByKeys, $methods)
+	public static function sortBy($array, $sortByKeys, $sorters, $orders = [])
 	{
 		if( is_string($sortByKeys) )
 		{
@@ -164,14 +174,15 @@ class Ar
 		}
 
 		$sortByKeys = array_values((array)$sortByKeys);
-		$methods = array_values((array)$methods);
+		$sorters = array_values((array)$sorters);
 
-		uasort($array, function($a, $b) use ($sortByKeys, $methods) {
+		uasort($array, function($a, $b) use ($sortByKeys, $sorters, $orders) {
 
 			$return = 0;
 
 			foreach( $sortByKeys as $key => $sortBy ) 
 			{
+				// call callback or get attribute
 				if( is_callable($sortBy) )
 				{
 					$aSort = call_user_func($sortBy, $a);
@@ -183,10 +194,23 @@ class Ar
 					$bSort = u\def($b, $sortBy);
 				}
 
-				$method = isset($methods[$key]) ? $methods[$key] : $methods[ ( count($methods) - 1 ) ];
+				$method = isset($sorters[$key]) ? $sorters[$key] : $sorters[ ( count($sorters) - 1 ) ];
 
+				// make sure Sort class from pisc\arrr namespace is used
+				if( is_string($method) && substr($method, 0, 4) === 'Sort' ) $method = __NAMESPACE__ .'\\' . $method;
+
+				$order = u\def($orders, $key, 'desc');
+
+				// call compare function
 				$return = call_user_func($method, $aSort, $bSort);
 
+				// reverse return value
+				if( $order !== 'desc' )
+				{
+					$return *= -1;
+				}
+
+				// return if the items compared are not the same
 				if( $return !== 0 )
 				{
 					return $return;

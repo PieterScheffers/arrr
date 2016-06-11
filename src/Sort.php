@@ -22,6 +22,16 @@ class Sort
 		return static::byDefault($a, $b);
 	}
 
+	public static function byRoundedNumber($a, $b)
+	{
+		return static::byDefault( round($a), round($b) );
+	}
+
+	public static function byAbsoluteNumber($a, $b)
+	{
+		return static::byDefault( abs($a), abs($b) );
+	}
+
 	public static function byString($a, $b)
 	{
 		// Returns < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
@@ -39,7 +49,17 @@ class Sort
 		return strcasecmp($a, $b);
 	}
 
-	function byDate(DateTime $a, DateTime $b)
+	public static function byTrimmedString($a, $b)
+	{
+		return static::byString( trim($a), trim($b) );
+	}
+
+	public static function byTrimmedStringCase($a, $b)
+	{
+		return static::byStringCase( trim($a), trim($b) );
+	}
+
+	public static function byDate(DateTime $a, DateTime $b)
 	{
 		$a = DateTime::createFromFormat('Y-m-d H:i:s', $a->format('Y-m-d') . " 00:00:00");
 		$b = DateTime::createFromFormat('Y-m-d H:i:s', $b->format('Y-m-d') . " 00:00:00");
@@ -47,12 +67,12 @@ class Sort
 		return static::byDefault($a, $b);
 	}
 
-	function byDateTime(DateTime $a, DateTime $b)
+	public static function byDateTime(DateTime $a, DateTime $b)
 	{
 		return static::byDefault($a, $b);
 	}
 
-	function byTime(DateTime $a, DateTime $b)
+	public static function byTime(DateTime $a, DateTime $b)
 	{
 		$a = DateTime::createFromFormat('Y-m-d H:i:s', "1000-01-01 " . $a->format('H:i:s'));
 		$b = DateTime::createFromFormat('Y-m-d H:i:s', "1000-01-01 " . $b->format('H:i:s'));
