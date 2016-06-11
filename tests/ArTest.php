@@ -11,7 +11,8 @@ class ArTest extends PHPUnit_Framework_TestCase
         echo __CLASS__ . "/" . $this->getName() . "\n";
     }
 
-	public function testDetect() {
+	public function testDetect() 
+    {
     	$arrayOfObjects = [
     		(object)[ 'id' => 25, 'place' => 'Amsterdam' ],
     		(object)[ 'id' => 30, 'place' => 'London' ],
@@ -33,7 +34,8 @@ class ArTest extends PHPUnit_Framework_TestCase
     	$this->assertEquals( $selectedItem, $shouldBe );
 	}
 
-    public function testType() {
+    public function testType() 
+    {
         $indexed = [ 0 => 'rabbit', 1 => 'cow', 2 => 'horse', 3 => 'cat', 4 => 'dog', 5 => 'frog' ];
         $sparse  = [ 0 => 'rabbit',             2 => 'horse', 3 => 'cat',             5 => 'frog', 7 => 'cow', 10 => 'dog' ];
         $associative = [ 'a' => 'rabbit', 'b' => 'cow', 2 => 'horse', 3 => 'cat', 4 => 'dog', 5 => 'frog' ];
@@ -42,6 +44,14 @@ class ArTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( Ar::type($sparse),      'sparse');
         $this->assertEquals( Ar::type($associative), 'assoc' );
 
+    }
+
+    public function testFlatten()
+    {
+        $flat = Ar::flatten([ 'cow', [ 'bear', ['bunny', 'santa' ], 'rabbit' ]]);
+        $expected = [ 'cow', 'bear', 'bunny', 'santa', 'rabbit' ];
+        
+        $this->assertEquals( $flat, $expected );
     }
 
 }

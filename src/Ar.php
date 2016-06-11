@@ -3,6 +3,7 @@
 namespace pisc\Arrr;
 
 use Closure;
+use pisc\upperscore as u;
 
 class Ar
 {
@@ -25,8 +26,9 @@ class Ar
 
 	public static function each($array, Closure $callback)
 	{
-		foreach( $array as $key => $value ) {
-			if( $callback($value, $key) === false )
+		foreach( $array as $key => $value ) 
+		{
+			if( !$callback($value, $key) )
 			{
 				break;
 			}
@@ -86,7 +88,7 @@ class Ar
 	public static function flatten($array) {
 
 	    $array = array_reduce($array, function($a, $item) {
-	        if( is_array($item) ) $item = arrayFlatten($item);
+	        if( is_array($item) ) $item = static::flatten($item);
 
 	        return array_merge($a, (array)$item);
 	    }, []);
@@ -114,7 +116,7 @@ class Ar
 			}
 			else
 			{
-				$key = def($value, $property, '');
+				$key = u\def($value, $property, '');
 			}
 			
 			$newArray[$key] = $value;
@@ -177,8 +179,8 @@ class Ar
 				}
 				else 
 				{
-					$aSort = def($a, $sortBy);
-					$bSort = def($b, $sortBy);
+					$aSort = u\def($a, $sortBy);
+					$bSort = u\def($b, $sortBy);
 				}
 
 				$method = isset($methods[$key]) ? $methods[$key] : $methods[ ( count($methods) - 1 ) ];
