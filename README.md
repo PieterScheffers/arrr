@@ -1,4 +1,5 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/pisc/arrr.svg?style=flat-square)](https://packagist.org/packages/pisc/arrr)
+[![Build Status](https://travis-ci.org/PieterScheffers/arrr.svg?branch=master)](https://travis-ci.org/PieterScheffers/arrr)
 
 # arrr
 Array class for PHP
