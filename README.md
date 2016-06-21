@@ -74,7 +74,7 @@ $places->mapIt(function($place) {
 	return "To destination {$place}";
 })
 
-echo $places->toJson();
+echo $places->toJson(); 
 
 // returns
 '[ "To destination Amsterdam", "To destination Vienna", "To destination Rome" ]'
