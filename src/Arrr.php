@@ -257,6 +257,42 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 		return $this;
 	}
 
+	public function reverse($preserveKeys = false)
+	{
+		return new static(array_reverse($this->attributes, $preserveKeys));
+	}
+
+	public function reverseIt($preserveKeys = false)
+	{
+		$this->attributes = array_reverse($this->attributes, $preserveKeys);
+
+		return $this;
+	}
+
+	/////////////// misc ///////////////
+	
+	public function values()
+	{
+		return new static(array_values($this->attributes));
+	}
+
+	public function valuesIt()
+	{
+		$this->attributes = array_values($this->attributes);
+
+		return $this;
+	}
+
+	public function keys()
+	{
+		return new static(array_keys($this->attributes));
+	}
+
+	public function flip()
+	{
+		return new static(array_flip($this->attributes));
+	}
+
 	/////////////// Serializable ///////////////
 
     public function serialize() 
