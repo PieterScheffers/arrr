@@ -205,10 +205,12 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 		return count($poppedItems) === 1 ? $poppedItems[0] : $poppedItems;
 	}
 
-	public function last($count = 1)
+	public function last()
 	{
-		$items = $this->slice(-$count);
-		return (count($items) === 1) ? $items[0] : $items;
+		$values = $this->values()->toArray();
+		$numberOfvalues = count($values);
+
+		return ( $numberOfvalues > 0 ) ? $values[$numberOfvalues - 1] : null;
 	}
 
 	public function prepend($items)
@@ -240,9 +242,10 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 		return count($shiftedItems) === 1 ? $shiftedItems[0] : $shiftedItems;
 	}
 
-	public function first($count = 1)
+	public function first()
 	{
-		return $this->slice(0, $count);
+		$values = $this->values()->toArray();
+		return ( count($values) > 0 ) ? $values[0] : null;
 	}
 
 	public function slice($offset, $length = null)
