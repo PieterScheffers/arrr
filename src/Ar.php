@@ -73,6 +73,11 @@ class Ar
 		return $newAttributes;
 	}
 
+	public static function select($array, Closure $callback)
+	{
+		return static::filter($array, $callback);
+	}
+
 	public static function detect($array, Closure $callback)
 	{
 		foreach( $array as $key => $value ) 
@@ -84,6 +89,11 @@ class Ar
 		}
 
 		return null;
+	}
+
+	public static function find($array, Closure $callback)
+	{
+		return static::detect($array, $callback);
 	}
 
 	public static function flatten($array) {

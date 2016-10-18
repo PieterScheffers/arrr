@@ -41,6 +41,18 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 	}
 
 	/////////////// functional ///////////////
+	
+	public function each(Closure $callback) 
+	{
+		foreach( $this->attributes as $key => $value ) 
+		{
+			if( $callback($value, $key) === false ) {
+				break;
+			}
+		}
+
+		return $this;
+	}
 
 	public function reduce(Closure $callback, $initial = 0)
 	{
@@ -93,6 +105,11 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 	public function detect(Closure $callback)
 	{
 		return Ar::detect($this->attributes, $callback);
+	}
+
+	public function find(Closure $callback)
+	{
+		return $this->detect($callback);
 	}
 
 	/////////////// Custom ///////////////
@@ -170,6 +187,98 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 	public function sortByIt($sortByKeys, $methods)
 	{
 		$this->attributes = Ar::sortBy($this->attributes, $sortByKeys, $methods);
+
+		return $this;
+	}
+
+	/////////////// return Boolean ///////////////
+	
+	public function containsOr()
+	{
+		$args = (new static(func_get_args()))->flattenIt();
+
+		$found = $args->detect(function($value) {
+			return in_array($value, $this->attributes);
+		});
+
+		return !is_null($found);
+	}
+
+	public function containsAnd()
+	{
+		$args = (new static(func_get_args()))->flattenIt();
+
+		foreach( $this->attributes as $key => $value) 
+		{
+			$found = $args->detect(function($arg) use ($value) {
+				return $arg == $value;
+			});
+
+			if( $found ) $args->removeAllIt($found);
+
+			if( $args->count() < 1 ) return true;
+		}
+
+		return false;
+	}
+
+	/////////////// return Boolean ///////////////
+
+	public function removeFirst($remove)
+	{
+		$newArr = [];
+		$found = false;
+
+		foreach( $this->attributes as $key => $value)
+		{
+			if( $found === false && $value != $remove )
+			{
+				$found = true;
+				$newArr[$key] = $value;
+			}
+		}
+
+		return new static($newArr);
+	}
+
+	public function removeFirstIt($remove)
+	{
+		foreach( $this->attributes as $key => $value)
+		{
+			if( $value == $remove )
+			{
+				unset($this->attributes[$key]);
+				return $this;
+			}
+		}
+
+		return $this;
+	}
+
+	public function removeAll($remove)
+	{
+		$newArr = [];
+
+		foreach( $this->attributes as $key => $value)
+		{
+			if( $value != $remove )
+			{
+				$newArr[$key] = $value;
+			}
+		}
+
+		return new static($newArr);
+	}
+
+	public function removeAllIt($remove)
+	{
+		foreach( $this->attributes as $key => $value)
+		{
+			if( $value == $remove )
+			{
+				unset($this->attributes[$key]);
+			}
+		}
 
 		return $this;
 	}

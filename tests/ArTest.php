@@ -1,9 +1,11 @@
 <?php
+namespace pisc\Arrr;
 
+use pisc\Arrr\UnitTest;
 use pisc\Arrr\Arrr;
 use pisc\Arrr\Ar;
 
-class ArTest extends PHPUnit_Framework_TestCase 
+class ArTest extends UnitTest 
 {
 
     public function setUp() 
