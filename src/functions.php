@@ -1,6 +1,9 @@
 <?php
 
-function ar($attributes)
+if( !function_exists('ar') )
 {
-	return new pisc\Arrr\Arrr($attributes);
+	function ar($attributes)
+	{
+		return new pisc\Arrr\Arrr($attributes);
+	}
 }
