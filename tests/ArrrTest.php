@@ -18,7 +18,8 @@ class ArrrTest extends UnitTest
         $this->assertEquals( $array["someKey"], "someValue" );
     }
 
-	public function testDetect() {
+	public function testDetect() 
+    {
     	$arrayOfObjects = new Arrr([
     		(object)[ 'id' => 25, 'place' => 'Amsterdam' ],
     		(object)[ 'id' => 30, 'place' => 'London' ],
@@ -40,7 +41,8 @@ class ArrrTest extends UnitTest
     	$this->assertEquals( $selectedItem, $shouldBe );
 	}
 
-    public function testType() {
+    public function testType() 
+    {
         $indexed = new Arrr([ 0 => 'rabbit', 1 => 'cow', 2 => 'horse', 3 => 'cat', 4 => 'dog', 5 => 'frog' ]);
         $sparse  = new Arrr([ 0 => 'rabbit',             2 => 'horse', 3 => 'cat',             5 => 'frog', 7 => 'cow', 10 => 'dog' ]);
         $associative = new Arrr([ 'a' => 'rabbit', 'b' => 'cow', 2 => 'horse', 3 => 'cat', 4 => 'dog', 5 => 'frog' ]);
@@ -49,6 +51,16 @@ class ArrrTest extends UnitTest
         $this->assertEquals( $sparse->type(),      'sparse' );
         $this->assertEquals( $associative->type(), 'assoc' );
 
+    }
+
+    public function testJoin()
+    {
+        $arrr = new Arrr([ "scheep", "cow", "chicken", "pig" ]);
+        $string = $arrr->join("|");
+
+        $expected = "scheep|cow|chicken|pig";
+
+        $this->assertEquals( $string, $expected );
     }
 
 }

@@ -222,7 +222,7 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 		return false;
 	}
 
-	/////////////// return Boolean ///////////////
+	/////////////// Remove value ///////////////
 
 	public function removeFirst($remove)
 	{
@@ -281,6 +281,28 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 		}
 
 		return $this;
+	}
+
+	/////////////// explode / implode ///////////////
+	
+	public function implode($delimiter = ",")
+	{
+		return implode($delimiter, $this->attributes);
+	}
+
+	public function join($delimiter = ",")
+	{
+		return $this->implode($delimiter);
+	}
+
+	public static function explode($string, $delimiter = ",")
+	{
+		return new static(explode($delimiter, $string));
+	}
+
+	public static function split($string, $delimiter = ",")
+	{
+		return new static(explode($delimiter, $string));
 	}
 
 	/////////////// Push / Pop / Shift / Unshift ///////////////
