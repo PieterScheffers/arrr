@@ -5,6 +5,7 @@ namespace pisc\Arrr;
 use Closure;
 use pisc\upperscore as u;
 use pisc\Arrr\Sort;
+use pisc\Arrr\Arrr;
 
 class Ar
 {
@@ -23,6 +24,28 @@ class Ar
 	public static function ar($attributes)
 	{
 		return static::instance($attributes);
+	}
+
+	public static function toArray($attributes)
+	{
+		if( is_array($attributes) ) return $attributes;
+		if( is_object($attributes) )
+		{
+			if( method_exists($attributes, 'toArray') )
+			{
+				return $attributes->toArray();
+			}
+
+			return (array)$attributes;
+		}
+
+		return [ $attributes ];
+	}
+
+	public static function toArrr($attributes)
+	{
+		if( $attributes instanceof Arrr ) return $attributes;
+		return new Arrr(static::toArray($attributes));
 	}
 
 	public static function each($array, Closure $callback)
@@ -231,6 +254,24 @@ class Ar
 		});
 
 		return $array;
+	}
+
+	public static function merge()
+	{
+		$args = array_map(function($arg) { return static::toArray($arg); }, func_get_args());
+		
+		array_unshift($args, $this->attributes);
+
+		return call_user_func_array('array_merge', $args);
+	}
+
+	public static function mergeValues()
+	{
+		$args = array_map(function($arg) { return array_values(static::toArray($arg)); }, func_get_args());
+		
+		array_unshift($args, array_values($this->attributes));
+
+		return call_user_func_array('array_merge', $args);
 	}
 
 	public static function append($array, $items)

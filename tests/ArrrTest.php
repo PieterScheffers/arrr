@@ -41,6 +41,29 @@ class ArrrTest extends UnitTest
     	$this->assertEquals( $selectedItem, $shouldBe );
 	}
 
+    public function testMerge()
+    {
+        $arr = new Arrr([ "a" => "cow", "b" => "pig", "c" => "chicken" ]);
+        $secondArr = new Arrr([ "d" => "car", "e" => "bicycle", "b" => "truck" ]);
+
+        // b key gets overwritten
+        $expected = new Arrr([ "a" => "cow", "c" => "chicken", "d" => "car", "e" => "bicycle", "b" => "truck" ]);
+
+        $this->assertEquals( $arr->merge($secondArr), $expected );
+    }
+
+    public function testMergeValues()
+    {
+        $arr = new Arrr([ "a" => "cow", "b" => "pig", "c" => "chicken" ]);
+        $secondArr = new Arrr([ "d" => "car", "e" => "bicycle", "b" => "truck" ]);
+
+        // b key doesn't get overwritten
+        // all values get a new key
+        $expected = new Arrr([ "cow", "pig", "chicken", "car", "bicycle", "truck" ]);
+
+        $this->assertEquals( $arr->mergeValues($secondArr), $expected );
+    }
+
     public function testType() 
     {
         $indexed = new Arrr([ 0 => 'rabbit', 1 => 'cow', 2 => 'horse', 3 => 'cat', 4 => 'dog', 5 => 'frog' ]);

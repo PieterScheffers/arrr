@@ -15,6 +15,7 @@ use ArrayAccess;
 use JsonSerializable;
 use Serializable;
 use Closure;
+use pisc\Arrr\Ar;
 
 class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, JsonSerializable
 {
@@ -22,12 +23,7 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 
 	public function __construct($attributes)
 	{
-		if( !is_array($attributes) && get_class($attributes) === 'Illuminate\Support\Collection' )
-		{
-			$this->attributes = $attributes->all();
-		}
-
-		$this->attributes = (array)$attributes;
+		$this->attributes = Ar::toArray($attributes);
 	}
 
 	public static function instance($attributes)
@@ -279,6 +275,48 @@ class Arrr implements IteratorAggregate, Countable, ArrayAccess, Serializable, J
 				unset($this->attributes[$key]);
 			}
 		}
+
+		return $this;
+	}
+
+	/////////////// Merge //////////////
+	
+	public function merge()
+	{
+		$args = array_map(function($arg) { return Ar::toArray($arg); }, func_get_args());
+
+		array_unshift($args, $this->attributes);
+
+		return new static( call_user_func_array('array_merge', $args) );
+	}
+
+	public function mergeIt()
+	{
+		$args = array_map(function($arg) { return Ar::toArray($arg); }, func_get_args());
+		
+		array_unshift($args, $this->attributes);
+
+		$this->attributes = call_user_func_array('array_merge', $args);
+
+		return $this;
+	}
+
+	public function mergeValues()
+	{
+		$args = array_map(function($arg) { return array_values(Ar::toArray($arg)); }, func_get_args());
+
+		array_unshift($args, array_values($this->attributes));
+
+		return new static( call_user_func_array('array_merge', $args) );
+	}
+
+	public function mergeValuesIt()
+	{
+		$args = array_map(function($arg) { return array_values(Ar::toArray($arg)); }, func_get_args());
+		
+		array_unshift($args, array_values($this->attributes));
+
+		$this->attributes = call_user_func_array('array_merge', $args);
 
 		return $this;
 	}
